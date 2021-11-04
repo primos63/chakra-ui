@@ -29,6 +29,7 @@ export function setScript(initialValue: ConfigColorMode) {
 
   if (colorMode) {
     const root = document.documentElement
+    console.log("color-mode-script set", colorMode)
     root.style.setProperty("--chakra-ui-color-mode", colorMode)
   }
 }

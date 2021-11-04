@@ -100,19 +100,31 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
     if (isBrowser && colorModeManager.type === "localStorage") {
       const systemColorWithFallback = getColorScheme(defaultColorMode)
       if (useSystemColorMode) {
+        console.log("use useSystemColorMode", systemColorWithFallback)
         return rawSetColorMode(systemColorWithFallback)
       }
       const rootGet = root.get()
       const colorManagerGet = colorModeManager.get()
+      console.log({
+        root: rootGet,
+        colorModeManager: colorManagerGet,
+        initialColorMode,
+        defaultColorMode,
+        systemColorWithFallback,
+      })
       if (rootGet) {
+        console.log("use rootGet", rootGet)
         return rawSetColorMode(rootGet)
       }
       if (colorManagerGet) {
+        console.log("use colorManagerGet", colorManagerGet)
         return rawSetColorMode(colorManagerGet)
       }
       if (initialColorMode === "system") {
+        console.log("initialColorMode", colorManagerGet)
         return rawSetColorMode(systemColorWithFallback)
       }
+      console.log("useDefaultColorMode")
       return rawSetColorMode(defaultColorMode)
     }
   }, [colorModeManager, useSystemColorMode, defaultColorMode, initialColorMode])
@@ -154,14 +166,14 @@ export function ColorModeProvider(props: ColorModeProviderProps) {
   }, [setColorMode, useSystemColorMode, initialColorMode])
 
   // presence of `value` indicates a controlled context
-  const context = React.useMemo(
-    () => ({
+  const context = React.useMemo(() => {
+    console.log("context color mode", value ?? colorMode)
+    return {
       colorMode: (value ?? colorMode) as ColorMode,
       toggleColorMode: value ? noop : toggleColorMode,
       setColorMode: value ? noop : setColorMode,
-    }),
-    [colorMode, setColorMode, toggleColorMode, value],
-  )
+    }
+  }, [colorMode, setColorMode, toggleColorMode, value])
 
   return (
     <ColorModeContext.Provider value={context}>
